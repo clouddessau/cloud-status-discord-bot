@@ -2,6 +2,7 @@ const fs = require('fs');
 const { Client, Intents, Collection } = require('discord.js');
 const dotenv = require('dotenv');
 
+const guildID = '705125706186620968';
 const commandFileDir = './src/commands';
 
 dotenv.config();
@@ -35,7 +36,7 @@ client.on('messageCreate', async message => {
 			description: 'Replies with the current [cloud] status',
 		};
 
-		const command = await client.guilds.cache.get('705125706186620968')?.commands.create(data);
+		const command = await client.guilds.cache.get(guildID)?.commands.create(data);
 
 		console.log(command);
 	}
