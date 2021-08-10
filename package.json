@@ -1,0 +1,22 @@
+{
+  "name": "cloud-status-discord-bot",
+  "version": "1.0.0",
+  "description": "Discord bot displaying the current [cloud] status",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cloud",
+    "dessau",
+    "status",
+    "discord",
+    "bot",
+    "university",
+    "college",
+    "students",
+    "community"
+  ],
+  "author": "Johannes Jakob",
+  "license": "MIT"
+}
