@@ -17,4 +17,6 @@ jobs:
         clean: false
 
     - name: Start PM2 process and application
-      run: pm2 startOrReload $GITHUB_WORKSPACE/ecosystem.config.js --env $SERVER --cwd $GITHUB_WORKSPACE
+      run: |
+        npm install \
+        pm2 startOrReload $GITHUB_WORKSPACE/ecosystem.config.js --env $SERVER --cwd $GITHUB_WORKSPACE \
