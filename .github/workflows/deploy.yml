@@ -1,0 +1,20 @@
+name: deploy_bot
+env:
+  SERVER: production
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      with:
+        clean: false
+
+    - name: Start PM2 process and application
+      run: pm2 startOrReload $GITHUB_WORKSPACE/ecosystem.config.js --env $SERVER --cwd $GITHUB_WORKSPACE
