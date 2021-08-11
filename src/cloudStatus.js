@@ -9,7 +9,12 @@ class CloudStatus {
 	updateStatus(state) {
 		this.isOpen = state;
 
+		// Emit an event to notify that the [cloud] status changed
 		statusUpdate.emit('update', this.isOpen);
+	}
+
+	toggleStatus() {
+		statusUpdate.emit('toggle');
 	}
 }
 
@@ -33,10 +38,22 @@ const database = admin.firestore();
 // Get [cloud] status document in Firestore and observe it
 const statusDoc = database.collection('status').doc('cloud_status');
 statusDoc.onSnapshot(snapshot => {
+	console.log('Received status update');
+
 	// Update local [cloud] status
 	status.updateStatus(snapshot.data().open);
 }, error => {
-	console.log(`Encountered error: ${error}`);
+	console.error(`Encountered error: ${error}`);
+});
+
+// Toggle [cloud] status
+statusUpdate.on('toggle', async () => {
+	// Toggle [cloud] status in Firestore
+	statusDoc.update({
+		open: !status.isOpen,
+	});
+
+	console.log('Toggled the [cloud] status');
 });
 
 // Export class instance
