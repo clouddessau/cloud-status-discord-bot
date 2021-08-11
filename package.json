@@ -5,7 +5,8 @@
   "repository": "github:clouddessau/cloud-status-discord-bot",
   "main": "index.js",
   "scripts": {
-    "start": "node ."
+    "start": "node .",
+    "lint": "eslint ."
   },
   "keywords": [
     "cloud",
