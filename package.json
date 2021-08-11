@@ -2,6 +2,7 @@
   "name": "cloud-status-discord-bot",
   "version": "1.0.0",
   "description": "Discord bot displaying the current [cloud] status",
+  "repository": "github:clouddessau/cloud-status-discord-bot",
   "main": "index.js",
   "scripts": {
     "start": "node ."
