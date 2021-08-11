@@ -1,3 +1,5 @@
+const statusUpdate = require('./statusUpdate.js');
+
 class CloudStatus {
 	constructor() {
 		// Set initial value
@@ -6,6 +8,8 @@ class CloudStatus {
 
 	updateStatus(state) {
 		this.isOpen = state;
+
+		statusUpdate.emit('update', this.isOpen);
 	}
 }
 
@@ -29,8 +33,6 @@ const database = admin.firestore();
 // Get [cloud] status document in Firestore and observe it
 const statusDoc = database.collection('status').doc('cloud_status');
 statusDoc.onSnapshot(snapshot => {
-	console.log(`Received doc snapshot: ${snapshot}`);
-
 	// Update local [cloud] status
 	status.updateStatus(snapshot.data().open);
 }, error => {

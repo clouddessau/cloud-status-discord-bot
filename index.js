@@ -2,6 +2,9 @@ const fs = require('fs');
 const { Client, Intents, Collection } = require('discord.js');
 const dotenv = require('dotenv');
 
+const status = require('./src/cloudStatus.js');
+const statusUpdate = require('./src/statusUpdate.js');
+
 const guildID = '705125706186620968';
 const commandFileDir = './src/commands';
 
@@ -24,6 +27,17 @@ for (const file of commandFiles) {
 // Log once the discord.js client is ready
 client.once('ready', () => {
 	console.log(`Client is ready. Logged in as "${client.user.tag}".`);
+
+	// Set the message (activity) “Listening to /status”
+	client.user.setActivity('/status', { type: 'LISTENING' });
+
+	// Initially set the bot presence according to the current [cloud] status
+	setPresence(status.isOpen);
+
+	// Update the bot presence when the [cloud] status changes
+	statusUpdate.on('update', isOpen => {
+		setPresence(isOpen);
+	});
 });
 
 // Register guild commands
@@ -38,7 +52,7 @@ client.on('messageCreate', async message => {
 
 		const command = await client.guilds.cache.get(guildID)?.commands.create(data);
 
-		console.log(command);
+		console.log(`Created command ${command.name}`);
 	}
 });
 
@@ -57,6 +71,16 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command.', ephemeral: true });
 	}
 });
+
+// Set the bot presence
+function setPresence(isOpen) {
+	if (isOpen) {
+		client.user.setStatus('online');
+	}
+	else {
+		client.user.setStatus('dnd');
+	}
+}
 
 // discord.js client login using application token
 client.login(process.env.BOT_TOKEN);
