@@ -9,6 +9,7 @@ const statusUpdate = require('./src/statusUpdate.js');
 
 const guildID = '705125706186620968';
 const clientID = '874333019673100349';
+const adminRoleID = '705126085918195752';
 const commandFileDir = './src/commands';
 
 dotenv.config();
@@ -26,13 +27,14 @@ const commandFiles = fs.readdirSync(commandFileDir).filter(file => file.endsWith
 for (const file of commandFiles) {
 	const command = require(`${commandFileDir}/${file}`);
 
-	commands.push(command.data.toJSON());
+	commands.push(command.data);
 	client.commands.set(command.data.name, command);
 }
 
 // Create a Discord API REST client
 const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
 
+// Register guild commands
 (async () => {
 	try {
 		console.log('Started refreshing application commands.');
@@ -50,11 +52,38 @@ const rest = new REST({ version: '9' }).setToken(process.env.BOT_TOKEN);
 })();
 
 // Log once the discord.js client is ready
-client.once('ready', () => {
+client.once('ready', async () => {
 	console.log(`Client is ready. Logged in as "${client.user.tag}".`);
 
 	// Set the message (activity) “Listening to /status”
 	client.user.setActivity('/status', { type: 'LISTENING' });
+
+	if (!client.application?.owner) await client.application?.fetch();
+
+	// Get all guild commands
+	const guildCommands = await rest.get(
+		Routes.applicationGuildCommands(clientID, guildID),
+	);
+
+	// Iterate over guild commands and set permissions
+	for (const guildCommand of guildCommands) {
+		// Set permissions for the `/togglestatus` command
+		if (guildCommand.name === 'togglestatus') {
+			const command = await client.guilds.cache.get(guildID)?.commands.fetch(guildCommand.id);
+
+			console.log(command);
+
+			const permissions = [
+				{
+					id: adminRoleID,
+					type: 'ROLE',
+					permission: true,
+				},
+			];
+
+			await command.permissions.add({ permissions });
+		}
+	}
 
 	// Initially set the bot presence according to the current [cloud] status
 	setPresence(status.isOpen);
