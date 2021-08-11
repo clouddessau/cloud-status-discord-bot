@@ -29,8 +29,6 @@ const database = admin.firestore();
 // Get [cloud] status document in Firestore and observe it
 const statusDoc = database.collection('status').doc('cloud_status');
 statusDoc.onSnapshot(snapshot => {
-	console.log(`Received doc snapshot: ${snapshot}`);
-
 	// Update local [cloud] status
 	status.updateStatus(snapshot.data().open);
 }, error => {

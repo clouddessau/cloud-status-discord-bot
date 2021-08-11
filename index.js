@@ -38,7 +38,7 @@ client.on('messageCreate', async message => {
 
 		const command = await client.guilds.cache.get(guildID)?.commands.create(data);
 
-		console.log(command);
+		console.log(`Created command ${command.name}`);
 	}
 });
 
