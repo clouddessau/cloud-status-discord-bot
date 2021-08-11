@@ -1,13 +1,13 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-
 // Get [cloud] status
 const status = require('../cloudStatus.js');
 
 // Export command '/togglestatus'
 module.exports = {
-	data: new SlashCommandBuilder()
-		.setName('togglestatus')
-		.setDescription('Toggles the [cloud] status'),
+	data: {
+		name: 'togglestatus',
+		description: 'Toggles the [cloud] status',
+		default_permission: false,
+	},
 	async execute(interaction) {
 		// Toggle [cloud] status
 		status.toggleStatus();
