@@ -1,3 +1,5 @@
+const statusUpdate = require('./statusUpdate.js');
+
 class CloudStatus {
 	constructor() {
 		// Set initial value
@@ -6,6 +8,8 @@ class CloudStatus {
 
 	updateStatus(state) {
 		this.isOpen = state;
+
+		statusUpdate.emit('update', this.isOpen);
 	}
 }
 
