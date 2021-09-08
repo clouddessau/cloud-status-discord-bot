@@ -1,6 +1,8 @@
 # [cloud] status Discord Bot
 
-_Discord bot displaying the current [cloud] status_
+## About
+
+This Discord bot displays the current [cloud] status that shows if the [cloud] room on the Dessau campus of [Anhalt University of Applied Sciences](https://hs-anhalt.de/en) is open or closed. [cloud] admins can change the status to virtually open and close the room.
 
 ## Features
 
