@@ -1,7 +1,10 @@
+// Import helper to conviniently detect development environment
+const isDev = require('../isDev');
+
 // Get [cloud] status
 const status = require('../cloudStatus.js');
 
-// Export command '/togglestatus'
+// Export command `/togglestatus`
 module.exports = {
 	data: {
 		name: 'togglestatus',
@@ -14,13 +17,20 @@ module.exports = {
 
 		// Confirm the action and reply with the new [cloud] status
 		const messageStaticPart = ' [cloud] is now ';
+		const devIndicatorMessage = ' [Development Mode]';
 
 		// HACK: Assume that the toggle operation succeeded and `status.isOpen` is now its opposite
 		if (!status.isOpen) {
-			await interaction.reply('🟢' + messageStaticPart + 'open!');
+			let reply = '🟢' + messageStaticPart + 'open!';
+			if (isDev) reply += devIndicatorMessage;
+
+			await interaction.reply(reply);
 		}
 		else {
-			await interaction.reply('🔴' + messageStaticPart + 'closed!');
+			let reply = '🔴' + messageStaticPart + 'closed!';
+			if (isDev) reply += devIndicatorMessage;
+
+			await interaction.reply(reply);
 		}
 	},
 };
