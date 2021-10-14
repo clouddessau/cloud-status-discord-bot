@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
+    "dev": "NODE_ENV=development node .",
     "lint": "eslint ."
   },
   "keywords": [
