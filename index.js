@@ -70,8 +70,8 @@ client.once('ready', async () => {
 
 	// Iterate over guild commands and set permissions
 	for (const guildCommand of guildCommands) {
-		// Set permissions for the `/togglestatus` command
-		if (guildCommand.name === 'togglestatus') {
+		// Set permissions for the `/togglestatus` and `/winddown` commands
+		if (guildCommand.name === 'togglestatus' || guildCommand.name === 'winddown') {
 			const command = await client.guilds.cache.get(guildID)?.commands.fetch(guildCommand.id);
 
 			console.log(command);
@@ -89,11 +89,17 @@ client.once('ready', async () => {
 	}
 
 	// Initially set the bot presence according to the current [cloud] status
-	setPresence(status.isOpen);
+	setOpenPresence(status.isOpen);
+	setWindDownPresence(status.windDown);
 
-	// Update the bot presence when the [cloud] status changes
-	statusUpdate.on('update', isOpen => {
-		setPresence(isOpen);
+	// Update the bot presence when [cloud] status changes
+	statusUpdate.on('updateStatus', isOpen => {
+		setOpenPresence(isOpen);
+	});
+
+	// Update the bot presence when [cloud] status "Wind Down" changed
+	statusUpdate.on('updateWindDown', windDown => {
+		setWindDownPresence(windDown);
 	});
 });
 
@@ -113,13 +119,23 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 
-// Set the bot presence
-function setPresence(isOpen) {
+// Set the bot presence for [cloud] status
+function setOpenPresence(isOpen) {
 	if (isOpen) {
 		client.user.setStatus('online');
 	}
 	else {
 		client.user.setStatus('dnd');
+	}
+}
+
+// Set the bot presence for [cloud] status "Wind Down"
+function setWindDownPresence(windDown) {
+	if (windDown) {
+		client.user.setStatus('idle');
+	}
+	else {
+		client.user.setStatus(status.isOpen ? 'online' : 'dnd');
 	}
 }
 

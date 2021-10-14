@@ -1,7 +1,10 @@
 // Get [cloud] status
 const status = require('../cloudStatus.js');
 
-// Export command '/status'
+// Import helper to conviniently detect development environment
+const isDev = require('../isDev');
+
+// Export command `/status`
 module.exports = {
 	data: {
 		name: 'status',
@@ -9,12 +12,27 @@ module.exports = {
 	},
 	async execute(interaction) {
 		const messageStaticPart = ' [cloud] is ';
+		const devIndicatorMessage = ' [Development Mode]';
 
 		if (status.isOpen) {
-			await interaction.reply('🟢' + messageStaticPart + 'open');
+			if (status.windDown) {
+				let reply = '🟡 [cloud] closes soon';
+				if (isDev) reply += devIndicatorMessage;
+
+				await interaction.reply(reply);
+			}
+			else {
+				let reply = '🟢' + messageStaticPart + 'open';
+				if (isDev) reply += devIndicatorMessage;
+
+				await interaction.reply(reply);
+			}
 		}
 		else {
-			await interaction.reply('🔴' + messageStaticPart + 'closed');
+			let reply = '🔴' + messageStaticPart + 'closed';
+			if (isDev) reply += devIndicatorMessage;
+
+			await interaction.reply(reply);
 		}
 	},
 };
