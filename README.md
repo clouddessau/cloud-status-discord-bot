@@ -8,9 +8,11 @@ This Discord bot displays the current [cloud] status that shows if the [cloud] r
 
 - Displays the [cloud] status in the server member list
   - **🟢 Online** when [cloud] is open
+  - **🟡 Idle** when [cloud] is about to close
   - **⛔️ Do Not Disturb** when [cloud] is closed
 - `/status` command to check the current status
 - `/togglestatus` command to toggle the status (for admins only)
+- `/winddown` command to indicate that [cloud] will close soon (for admins only)
 
 ## Roadmap
 

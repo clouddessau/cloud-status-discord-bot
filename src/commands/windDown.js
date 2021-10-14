@@ -4,30 +4,27 @@ const isDev = require('../isDev');
 // Get [cloud] status
 const status = require('../cloudStatus.js');
 
-// Export command `/togglestatus`
+// Export command `/winddown`
 module.exports = {
 	data: {
-		name: 'togglestatus',
-		description: 'Toggles the [cloud] status',
+		name: 'winddown',
+		description: 'Indicates that [cloud] is about to close',
 		default_permission: false,
 	},
 	async execute(interaction) {
-		// Toggle [cloud] status
-		status.toggleStatus();
-
-		// Confirm the action and reply with the new [cloud] status
-		const messageStaticPart = ' [cloud] is now ';
 		const devIndicatorMessage = ' [Development Mode]';
 
-		// HACK: Assume that the toggle operation succeeded and `status.isOpen` is now its opposite
-		if (!status.isOpen) {
-			let reply = '🟢' + messageStaticPart + 'open!';
+		// Enable [cloud] status "Wind Down" when [cloud] is open
+		if (status.isOpen) {
+			status.enableWindDown();
+
+			let reply = '🟡 [cloud] will close soon';
 			if (isDev) reply += devIndicatorMessage;
 
 			await interaction.reply(reply);
 		}
 		else {
-			let reply = '🔴' + messageStaticPart + 'closed!';
+			let reply = '❌ [cloud] is already closed';
 			if (isDev) reply += devIndicatorMessage;
 
 			await interaction.reply(reply);
