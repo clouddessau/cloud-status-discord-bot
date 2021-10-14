@@ -14,6 +14,9 @@ const commandFileDir = './src/commands';
 
 dotenv.config();
 
+// Log the program environment
+console.log(`Starting in ${process.env.NODE_ENV} environment`);
+
 // Initialize discord.js client
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
